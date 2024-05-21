@@ -5,8 +5,6 @@
 
 # Goal: Produce a ML algorithm (DNN, CNN, LLM, etc) from scratch containing all the neccesary different components, and documenting the entire process, links, and startups.
 
-## Subject - DNN Image Classifier Reworking Using CIFAR-100 Dataset
+## Subject - Deepfake Generated Chatbot
 
-The premise of this project will be to utilize a neural network to accurately classify images from the [CIFAR-100 dataset](https://www.cs.toronto.edu/~kriz/cifar.html) using SGD. 
-The implementation will utilize Python as the major language of choice to differentiate from a [former project](https://github.com/bwcurless/CS453_DNN) involving the much more condensed CIFAR-10 dataset 
-and usage of CUDA and C++. The focus will be to increase scale and use a different language to prove my understanding of DNN concepts. 
+The premise of this project will be to implement a realtime deepfake chatbot from scratch. This project will work in phases, first by implementing a generic ML algorithm that can infer from any vector dataset added to it, and use alignment models as necessary on the output. The second phase will be implementing APIs for openAI in order to build the real-time chatbot. 
