@@ -5,4 +5,4 @@
 
 ## Contents
 
-This folder contains the [CIFAR-100 dataset](https://www.cs.toronto.edu/~kriz/cifar.html) Python version as well as any miscellaneous data files used for training, validation, and testing.
+This folder contains any miscellaneous data files used for training, validation, and testing.
