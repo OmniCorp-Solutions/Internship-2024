@@ -14,12 +14,12 @@ Start with this [tutorial](https://realpython.com/face-recognition-with-python/)
 
 Changes needed:
 - create a simple http digest server to intake the photo in a json put/post and return a json object with the data recognition returned
-- detector needs to use either proper object oreinted pass by reference, or use python pass by dict method (meaing each call, and pass by reference needs to be clear so as know if the data being used)
+- detector needs to use either proper object oriented pass by reference, or use python pass by dict method (each call, and/or pass by reference needs to be clear so as know which data is being used)
 - documentation of how much was manually scripted vs ai generated
 - requirements.txt or setup.py
 - documentation on methods used, process flow, and input/output black box description of functionality
 - documentation on the license for the model (what would be best to forward computer science, a company, or personal use...), the data, and the result
-- what license is the source code roots, and/or braches used?
+- what license is the source code roots, and/or branches used?
 - theoretical use cases each of the above categories taking all the considerations into account
 - is this the best solution, what could be better, what is missing?
 - stream line the execution of the workflow using a single command
