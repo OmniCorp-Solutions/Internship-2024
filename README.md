@@ -10,3 +10,16 @@
 Implement a generic ML algorithm that can infer from any vector dataset added to it, and use alignment models as necessary on the output to perform facial recognition.
 
 Start with this [tutorial](https://realpython.com/face-recognition-with-python/) for facial reocognition.
+
+
+Changes needed:
+- clear runtime script or binary, with options listed using cli parsing, or tkinter for a gui interface
+- detector needs to use either proper object oreinted pass by reference, or use python pass by dict method (meaing each call, and pass by reference needs to be clear so as know if the data being used)
+- documentation of how much was manually scripted vs ai generated
+- requirements.txt or setup.py
+- documentation on methods used, process flow, and input/output black box description of functionality
+- documentation on the license for the model (what would be best to forward computer science, a company, or personal use...), the data, and the result
+- what license is the source code roots, and/or braches used?
+- theoretical use cases each of the above categories taking all the considerations into account
+- is this the best solution, what could be better, what is missing?
+- stream line the execution of the workflow using a single command
