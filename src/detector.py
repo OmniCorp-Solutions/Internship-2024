@@ -144,4 +144,3 @@ def _display_face(draw, bounding_box, name, color: str = "blue", text_color: str
         name,
         fill = text_color,
     )
-    

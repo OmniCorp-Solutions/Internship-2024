@@ -13,7 +13,7 @@ Start with this [tutorial](https://realpython.com/face-recognition-with-python/)
 
 
 Changes needed:
-- clear runtime script or binary, with options listed using cli parsing, or tkinter for a gui interface
+- create a simple http digest server to intake the photo in a json put/post and return a json object with the data recognition returned
 - detector needs to use either proper object oreinted pass by reference, or use python pass by dict method (meaing each call, and pass by reference needs to be clear so as know if the data being used)
 - documentation of how much was manually scripted vs ai generated
 - requirements.txt or setup.py
