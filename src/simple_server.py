@@ -3,6 +3,7 @@ import socketserver
 import json
 import pickle
 from urllib.parse import urlparse, parse_qs
+import detector
 
 PORT = 8080
 
@@ -26,7 +27,7 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 image = data['image']
                 
                 if key in keys_db:
-                    # Process the image (this is just a placeholder)
+                    # Process the image
                     result = self.process_image(image)
                     response = {'status': 'success', 'result': result}
                 else:
@@ -44,12 +45,17 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(response).encode('utf-8'))
 
     def process_image(self, image):
-        # Placeholder for image processing function
-        return "Processed image data"
+        # Create object of class DataImport from detector
+        face_rec = detector.DataImport()
+        
+        # Next process the image
+        processed_image = face_rec.recognize_faces(image, True)
+        
+        return processed_image #return string to represent image with recognition data base64
 
 # Set up the server
 handler = SimpleHTTPRequestHandler
-httpd = socketserver.TCPServer(("", PORT), handler)
+httpd = socketserver.TCPServer(("192.168.1.19", PORT), handler)
 
 print(f"Serving on port {PORT}")
 httpd.serve_forever()

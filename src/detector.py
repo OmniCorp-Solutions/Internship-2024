@@ -11,13 +11,14 @@ import numpy as np
 import pandas as pd
 import os
 import glob
-import cv2
+from io import BytesIO
 import matplotlib.pyplot as plt
 from pathlib import Path
 import face_recognition
 import pickle
 from collections import Counter
 from PIL import Image, ImageDraw
+import base64
 
 # Class DataImport()
 # The purpose of this class is to load training data into memory, encode images,
@@ -28,7 +29,6 @@ class DataImport:
     def __init__(self, data_directory: str = "../data/training"):
         self.images_path = glob.glob(data_directory + '/**/*.jpg', recursive = True, root_dir = data_directory) #grab all of the 1700 images
         self.labels = self.label_data()
-        self.image_array = self.import_images()
         self.image_labels = np.array(self.labels)
         self.data_directory = data_directory
 
@@ -46,21 +46,6 @@ class DataImport:
             image_labels.append(lab)
 
         return image_labels
-
-    def import_images(self):
-        images = []
-
-        #resize image to 128 x 128 and gather image information 
-        for file in self.images_path:
-            img = cv2.imread(file)
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            img = cv2.resize(img, (128, 128))
-            img = img / 255
-
-            images.append(img)
-
-        image_array = np.array(images)
-        return image_array
 
     def encode_images(self, model: str = "hog", encodings_location: Path = Path("../data/Outputs/encodings.pkl")) -> None:
         names = []
@@ -84,13 +69,21 @@ class DataImport:
         with encodings_location.open(mode = "wb") as f:
             pickle.dump(name_encodings, f)
 
-    def recognize_faces(self, image_location: str, model: str = "hog", encodings_location: Path = Path("../data/Outputs/encodings.pkl")) -> None:
+    def recognize_faces(self, image_unprocessed: str, encoded: bool = False, model: str = "hog", encodings_location: Path = Path("../data/Outputs/encodings.pkl")) -> None:
         #This method is to recognize unlabelled faces in an image location
         with encodings_location.open(mode = "rb") as f:
             loaded_encodings = pickle.load(f)
 
-        #load the input image to be identified
-        input_image = face_recognition.load_image_file(image_location)
+        #load the input image to be identified,
+        #if encoded is False, image_unprocessed should
+        #be a file path, otherwise it should be a Base64
+        #encoded string
+        if (encoded == False):
+            input_image = face_recognition.load_image_file(image_unprocessed)
+        else:
+            image_decoded = base64.b64decode(image_unprocessed)
+            image = Image.open(BytesIO(image_decoded))
+            input_image = np.array(image)
         
         #Use the model in order to identify faces on the input image
         input_face_locations = face_recognition.face_locations(input_image, model = model)
@@ -112,6 +105,14 @@ class DataImport:
         #remove the draw object and display
         del draw
         pillow_image.show()
+
+        #convert to base64
+        buffered = io.BytesIO()
+        pillow_image.save(buffered, format="JPEG")
+        img_bytes = buffered.getvalue()
+        img_processed = base64.b64encode(img_bytes).decode('utf-8')
+
+        return img_processed
 
 
 def _recognize_face(unknown_encoding, loaded_encodings):
