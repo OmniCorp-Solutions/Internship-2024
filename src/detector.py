@@ -104,10 +104,9 @@ class DataImport:
 
         #remove the draw object and display
         del draw
-        pillow_image.show()
 
         #convert to base64
-        buffered = io.BytesIO()
+        buffered = BytesIO()
         pillow_image.save(buffered, format="JPEG")
         img_bytes = buffered.getvalue()
         img_processed = base64.b64encode(img_bytes).decode('utf-8')

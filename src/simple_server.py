@@ -11,6 +11,13 @@ PORT = 8080
 with open('keys_db.pkl', 'rb') as f:
     keys_db = pickle.load(f)
 
+def authenticator(keys):
+    #function to check pickled database for keys, can be changed later to improve security
+    for lock in keys_db:
+        if keys in keys_db[lock]:
+            return True
+    return False
+
 class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     def _set_response(self, status=200, content_type='application/json'):
         self.send_response(status)
@@ -18,7 +25,7 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-        if self.path == '/api/face':
+        if self.path == '/':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             try:
@@ -26,7 +33,7 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 key = data['key']
                 image = data['image']
                 
-                if key in keys_db:
+                if authenticator(key):
                     # Process the image
                     result = self.process_image(image)
                     response = {'status': 'success', 'result': result}
