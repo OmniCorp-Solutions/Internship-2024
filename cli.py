@@ -189,15 +189,13 @@ def printKeys():  # s$8cyGN7KHjEU@DyTY7s4^NwNhp&e
     else:
         print("No keys added yet")
 
-def server():
+
+def runServer():
     simple_server.start()
 
+
 def runClient():
-    simple_client.getData(
-        image_path = "data/Validation/Johnny Depp/086_f052c533.jpg",
-        output_path = "data/Outputs/client_return.png",
-        key=input("Input API Key: ")
-    )
+    simple_client.getData(image_path="data/Validation/Johnny Depp/086_f052c533.jpg", output_path="data/Outputs/client_return.png", key=input("Input API Key: "))
 
 
 if __name__ == "__main__":
@@ -213,7 +211,7 @@ if __name__ == "__main__":
         removeKey(input("Please input key to remove: "))
     elif args.printKey:
         printKeys()
-    elif args.runServer:
+    elif args.server:
         runServer()
-    elif args.runClient:
+    elif args.client:
         runClient()
