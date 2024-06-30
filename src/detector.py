@@ -26,11 +26,12 @@ import base64
 # changing data_directory
 
 class DataImport:
-    def __init__(self, data_directory: str = "../data/training"):
+    def __init__(self, data_directory: str = "data/training", local=False):
         self.images_path = glob.glob(data_directory + '/**/*.jpg', recursive = True, root_dir = data_directory) #grab all of the 1700 images
         self.labels = self.label_data()
         self.image_labels = np.array(self.labels)
         self.data_directory = data_directory
+        self.local = local
 
     def label_data(self):
         #First establish the labels for the pictures
@@ -47,7 +48,7 @@ class DataImport:
 
         return image_labels
 
-    def encode_images(self, model: str = "hog", encodings_location: Path = Path("../data/Outputs/encodings.pkl")) -> None:
+    def encode_images(self, model: str = "hog", encodings_location: Path = Path("data/Outputs/encodings.pkl")) -> None:
         names = []
         encodings = []
         for filepath in Path(self.data_directory).glob("*/*"):
@@ -69,7 +70,7 @@ class DataImport:
         with encodings_location.open(mode = "wb") as f:
             pickle.dump(name_encodings, f)
 
-    def recognize_faces(self, image_unprocessed: str, encoded: bool = False, model: str = "hog", encodings_location: Path = Path("../data/Outputs/encodings.pkl")) -> None:
+    def recognize_faces(self, image_unprocessed: str, encoded: bool = False, model: str = "hog", encodings_location: Path = Path("data/Outputs/encodings.pkl")) -> None:
         #This method is to recognize unlabelled faces in an image location
         with encodings_location.open(mode = "rb") as f:
             loaded_encodings = pickle.load(f)
@@ -88,7 +89,7 @@ class DataImport:
         #Use the model in order to identify faces on the input image
         input_face_locations = face_recognition.face_locations(input_image, model = model)
         input_face_encodings = face_recognition.face_encodings(input_image, input_face_locations)
-
+        
         #draw the image with faces
         pillow_image = Image.fromarray(input_image)
         draw = ImageDraw.Draw(pillow_image)
@@ -100,18 +101,23 @@ class DataImport:
                 name = "Unknown"
             #print(name, bounding_box)
             #Removed print for pillow observations
+
+        if(self.local):
             _display_face(draw, bounding_box, name)
 
-        #remove the draw object and display
-        del draw
+            #remove the draw object and display
+            del draw
 
-        #convert to base64
-        buffered = BytesIO()
-        pillow_image.save(buffered, format="JPEG")
-        img_bytes = buffered.getvalue()
-        img_processed = base64.b64encode(img_bytes).decode('utf-8')
+            #convert to base64
+            buffered = BytesIO()
+            pillow_image.save(buffered, format="JPEG")
+            img_bytes = buffered.getvalue()
+            img_processed = base64.b64encode(img_bytes).decode('utf-8')
 
-        return img_processed
+            return img_processed
+        else:
+            del draw
+            return name
 
 
 def _recognize_face(unknown_encoding, loaded_encodings):
