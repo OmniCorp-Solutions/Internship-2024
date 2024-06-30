@@ -3,7 +3,7 @@ import socketserver
 import json
 import pickle
 from urllib.parse import urlparse, parse_qs
-import detector
+from src import detector
 import os
 
 PORT = 8080
