@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 import os
+from src import simple_client, simple_server
 
 PARENT_DIR = Path("data")
 DEFAULT_ENCODINGS_PATH = Path(f"{PARENT_DIR}/Outputs/encodings.pkl")
@@ -35,6 +36,8 @@ parser.add_argument("-f", action="store", help="Path to an image with an unknown
 parser.add_argument("--addKey", action="store_true", help="Add key to server database")
 parser.add_argument("--removeKey", action="store_true", help="Remove key to server database")
 parser.add_argument("--printKey", action="store_true", help="Print keys to server database")
+parser.add_argument("--server", action="store_true", help="Startup the facial recoginition server locally at :8080/api/facial_input")
+parser.add_argument("--client", action="store_true", help="Run a client side program to test server recognition")
 args = parser.parse_args()
 
 
@@ -186,6 +189,16 @@ def printKeys():  # s$8cyGN7KHjEU@DyTY7s4^NwNhp&e
     else:
         print("No keys added yet")
 
+def server():
+    simple_server.start()
+
+def runClient():
+    simple_client.getData(
+        image_path = "data/Validation/Johnny Depp/086_f052c533.jpg",
+        output_path = "data/Outputs/client_return.png",
+        key=input("Input API Key: ")
+    )
+
 
 if __name__ == "__main__":
     if args.train:
@@ -200,3 +213,7 @@ if __name__ == "__main__":
         removeKey(input("Please input key to remove: "))
     elif args.printKey:
         printKeys()
+    elif args.runServer:
+        runServer()
+    elif args.runClient:
+        runClient()

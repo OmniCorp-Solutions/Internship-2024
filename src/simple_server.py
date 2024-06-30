@@ -62,9 +62,10 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         
         return processed_image #return string to represent image with recognition data base64
 
-# Set up the server
-handler = SimpleHTTPRequestHandler
-httpd = socketserver.TCPServer(("127.0.0.1", PORT), handler)
+def start():
+    # Set up the server
+    handler = SimpleHTTPRequestHandler
+    httpd = socketserver.TCPServer(("127.0.0.1", PORT), handler)
 
-print(f"Serving on port {PORT}")
-httpd.serve_forever()
+    print(f"Serving on port {PORT}")
+    httpd.serve_forever()

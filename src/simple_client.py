@@ -42,19 +42,11 @@ def send_image(url, key, image_path, output_path):
     pillow_image.show()
     pillow_image.save(output_path, format="PNG")
 
-if __name__ == "__main__":
+
+def getData(image_path, output_path, key):
     # URL of the server endpoint
     root_url = "http://127.0.0.1:8080"
     endpoint = "facial_input"
     full_url = f"{root_url}/api/{endpoint}"
-
-    # Key to be sent
-    key = input("Input API Key: ")
-
-    # Path to the image file
-    image_path = "../../data/Validation/Johnny Depp/086_f052c533.jpg"
-
-    #path to file output
-    output_path = "..\..\data\Outputs\client_return.png"
 
     send_image(full_url, key, image_path, output_path)
