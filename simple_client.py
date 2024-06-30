@@ -49,7 +49,7 @@ if __name__ == "__main__":
     full_url = f"{root_url}/api/{endpoint}"
 
     # Key to be sent
-    key = "s$8cyGN7KHjEU@DyTY7s4^NwNhp&e"
+    key = input("Input API Key: ")
 
     # Path to the image file
     image_path = "../../data/Validation/Johnny Depp/086_f052c533.jpg"

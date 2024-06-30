@@ -36,10 +36,6 @@ Client development chat log with ChatGPT found [here](https://chatgpt.com/share/
 
 Base 64 conversion chat log with ChatGPT found [here](https://chatgpt.com/share/699b3c44-75a6-4599-ae44-6e24acf0a2a9).
 
-### Server
-
-Server AI-derived code found in serverAI.py.
-
 ## Software Outline
 
 This section focuses on the software itself: wht it does, how it does it, and and overview of how each module interacts with one another when being run.
