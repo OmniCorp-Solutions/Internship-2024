@@ -14,7 +14,7 @@ def encode_image(image_path):
     return encoded_image
 
 def send_image(url, key, image_path, output_path):
-    # Encode the image
+    # B64 Encode the image
     encoded_image = encode_image(image_path)
 
     # Prepare the JSON payload
@@ -44,10 +44,12 @@ def send_image(url, key, image_path, output_path):
 
 if __name__ == "__main__":
     # URL of the server endpoint
-    url = "http://192.168.1.19:8080"
+    root_url = "http://127.0.0.1:8080"
+    endpoint = "facial_input"
+    full_url = f"{root_url}/api/{endpoint}"
 
     # Key to be sent
-    key = "some_value1"
+    key = "s$8cyGN7KHjEU@DyTY7s4^NwNhp&e"
 
     # Path to the image file
     image_path = "../../data/Validation/Johnny Depp/086_f052c533.jpg"
@@ -55,4 +57,4 @@ if __name__ == "__main__":
     #path to file output
     output_path = "..\..\data\Outputs\client_return.png"
 
-    send_image(url, key, image_path, output_path)
+    send_image(full_url, key, image_path, output_path)

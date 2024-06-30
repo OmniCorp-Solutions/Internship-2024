@@ -38,7 +38,7 @@ Base 64 conversion chat log with ChatGPT found [here](https://chatgpt.com/share/
 
 ### Server
 
-Server AI-derived code found in serverAI.txt.
+Server AI-derived code found in serverAI.py.
 
 ## Software Outline
 

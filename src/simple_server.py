@@ -4,19 +4,21 @@ import json
 import pickle
 from urllib.parse import urlparse, parse_qs
 import detector
+import os
 
 PORT = 8080
 
-# Load the pickled database of keys
-with open('keys_db.pkl', 'rb') as f:
-    keys_db = pickle.load(f)
+# Load the pickled database of keys. what if no keys yet?
+if(os.path.isfile('keys_db.pkl')):
+    with open('keys_db.pkl', 'rb') as f:
+        keys_db = pickle.load(f)
+else:
+    keys_db = {}
 
-def authenticator(keys):
+def authenticator(key):
     #function to check pickled database for keys, can be changed later to improve security
-    for lock in keys_db:
-        if keys in keys_db[lock]:
-            return True
-    return False
+    # for good security, you want the database itself encrypted. no plain text. ie zero-trust security modeling.
+    return keys_db.get(key) or False
 
 class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     def _set_response(self, status=200, content_type='application/json'):
@@ -25,7 +27,7 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-        if self.path == '/':
+        if self.path == '/api/facial_input':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             try:
@@ -62,7 +64,7 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
 # Set up the server
 handler = SimpleHTTPRequestHandler
-httpd = socketserver.TCPServer(("192.168.1.19", PORT), handler)
+httpd = socketserver.TCPServer(("127.0.0.1", PORT), handler)
 
 print(f"Serving on port {PORT}")
 httpd.serve_forever()

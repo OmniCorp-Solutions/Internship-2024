@@ -7,8 +7,9 @@ from PIL import Image, ImageDraw
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import os
 
-PARENT_DIR = "../data"
+PARENT_DIR = Path("data")
 DEFAULT_ENCODINGS_PATH = Path(f"{PARENT_DIR}/Outputs/encodings.pkl")
 BOUNDING_BOX_COLOR = "blue"
 TEXT_COLOR = "white"
@@ -31,6 +32,9 @@ parser.add_argument(
     help="Which model to use for training: hog (CPU), cnn (GPU)",
 )
 parser.add_argument("-f", action="store", help="Path to an image with an unknown face")
+parser.add_argument("--addKey", action="store_true", help="Add key to server database")
+parser.add_argument("--removeKey", action="store_true", help="Remove key to server database")
+parser.add_argument("--printKey", action="store_true", help="Print keys to server database")
 args = parser.parse_args()
 
 
@@ -83,9 +87,9 @@ def recognize_faces(
         if not name:
             name = "Unknown"
             NOT_FOUND += 1
-            print(f"Not found: {NOT_FOUND}          ", end='\n\r')
+            print(f"Not found: {NOT_FOUND}          ", end="\n\r")
         else:
-            print(f"Name: {name}          ", end='\r')
+            print(f"Name: {name}          ", end="\r")
             _display_face(draw, bounding_box, name)
 
     del draw
@@ -138,10 +142,61 @@ def validate(model: str = "hog"):
         recognize_faces(image_location=str(filepath.absolute()), model=model)
 
 
+def addKey(newKey: str = ""):
+    if newKey != "":
+        if os.path.isfile("src/keys_db.pkl"):
+            with open("src/keys_db.pkl", "rb") as f:
+                keys_db = pickle.load(f)
+
+            keys_db.update({**keys_db, **{newKey: True}})
+        else:
+            keys_db = {newKey: True}
+
+        # Save the keys to a pickle file
+        with open("src/keys_db.pkl", "wb") as f:
+            pickle.dump(keys_db, f)
+
+        print(f"Added the new key: {newKey}. Thank you")
+
+
+def removeKey(key_string: str = ""):
+    if key_string != "" and os.path.isfile("src/keys_db.pkl"):
+        with open("src/keys_db.pkl", "rb") as f:
+            keys_db = pickle.load(f)
+
+        try:
+            del keys_db[key_string]
+
+            # Save the keys to a pickle file
+            with open("keys_db.pkl", "wb") as f:
+                pickle.dump(keys_db, f)
+
+            print(f"Removed the key: {key_string}. Thank you")
+        except:
+            pass
+
+
+def printKeys():  # s$8cyGN7KHjEU@DyTY7s4^NwNhp&e
+    if os.path.isfile("src/keys_db.pkl"):
+        with open("src/keys_db.pkl", "rb") as f:
+            keys_db = pickle.load(f)
+
+        for key, value in keys_db.items():
+            print(key)
+    else:
+        print("No keys added yet")
+
+
 if __name__ == "__main__":
     if args.train:
         encode_known_faces(model=args.m)
-    if args.validate:
+    elif args.validate:
         validate(model=args.m)
-    if args.test:
+    elif args.test:
         recognize_faces(image_location=args.f, model=args.m)
+    elif args.addKey:
+        addKey(input("Please input your new server authentication key: "))
+    elif args.removeKey:
+        removeKey(input("Please input key to remove: "))
+    elif args.printKey:
+        printKeys()
